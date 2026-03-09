@@ -32,9 +32,9 @@ namespace DevicesApp
             while (loop == 1)
             {
                 float totalDeviceCost = 0;
-                AddDevice(totalDeviceCost);
-                Console.WriteLine(totalDeviceCost);
-                totalCost = totalCost + totalDeviceCost;
+                //AddDevice(totalDeviceCost);
+                //Console.WriteLine(totalDeviceCost);
+                totalCost += AddDevice(totalDeviceCost);
 
                 Console.WriteLine("\n1   Add another device\n2   Quit and print summary");
                 loop = int.Parse(Console.ReadLine());
@@ -124,7 +124,7 @@ namespace DevicesApp
             for (int month = 1; month <= 6; month++)
             {
                
-                output += $"{month}       {deviceCost:c}\n";    
+                output += $"{month}        {deviceCost:c}\n";    
                 deviceCost = deviceCost * VALUELOSSRATE;
 
             }
