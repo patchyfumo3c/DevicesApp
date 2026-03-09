@@ -9,40 +9,33 @@ namespace DevicesApp
         static int laptopCounter = 0;
         static int desktopCounter = 0;
         static int otherDeviceCounter = 0;
-        static float totalInsurance = 0;
-
-
-
-
-
-
-
+        static decimal totalInsurance = 0;
+        static decimal mostValuableDeviceCost = 0;
+        static string mostValuableDevice;
 
         static void Main(string[] args)
         {
             int loop = 1;
-            float totalCost = 0f;
+            decimal totalCost = 0;
+
 
             //Display title page
             Console.WriteLine("  _____             _                            \r\n |  __ \\           (_)                           \r\n | |  | | _____   ___  ___ ___                   \r\n | |  | |/ _ \\ \\ / / |/ __/ _ \\                  \r\n | |__| |  __/\\ V /| | (_|  __/                  \r\n |_____/ \\___| \\_/ |_|\\___\\___|                  \r\n |_   _|                                         \r\n   | |  _ __  ___ _   _ _ __ __ _ _ __   ___ ___ \r\n   | | | '_ \\/ __| | | | '__/ _` | '_ \\ / __/ _ \\\r\n  _| |_| | | \\__ \\ |_| | | | (_| | | | | (_|  __/\r\n |_____|_| |_|___/\\__,_|_|  \\__,_|_| |_|\\___\\___|\r\n                                                 \r\n                                                 ");
             Console.WriteLine("Welcome to Device Insurance Calculator\nEnter to continue");
             Console.ReadLine();
             Console.Clear();
+
+
             //Add Devices
             while (loop == 1)
             {
-                float totalDeviceCost = 0;
+                decimal totalDeviceCost = 0;
                 totalCost += AddDevice(totalDeviceCost);
 
                 Console.WriteLine("\n1   Add another device\n2   Quit and print summary");
                 loop = int.Parse(Console.ReadLine());
                 Console.Clear();
             }
-
-            
-
-
-
 
 
             //Generate insurance summary
@@ -54,14 +47,14 @@ namespace DevicesApp
 
 
         //Add one device
-        static float AddDevice(float totalDeviceCost)
+        static decimal AddDevice(decimal totalDeviceCost)
         {
-            const float INSURANCEDISCOUNT = 0.1f;
+            const decimal INSURANCEDISCOUNT = 0.1m;
             const int DISCOUNTREQUIREMENT = 5;
-            const float VALUELOSSRATE = 0.95f;
+            const decimal VALUELOSSRATE = 0.95m;
 
             string deviceName;
-            float deviceCost;
+            decimal deviceCost;
             int deviceAmount;
             string deviceCategory;
 
@@ -92,7 +85,7 @@ namespace DevicesApp
 
 
             Console.WriteLine("\nEnter the cost");
-            deviceCost = float.Parse(Console.ReadLine());
+            deviceCost = decimal.Parse(Console.ReadLine());
 
 
             Console.WriteLine("Enter the amount of these devices");
@@ -102,12 +95,12 @@ namespace DevicesApp
 
             //Calculate cost
             totalDeviceCost = deviceCost * deviceAmount;
+
             if (deviceAmount > DISCOUNTREQUIREMENT)
             {
                 totalDeviceCost -= (deviceAmount - DISCOUNTREQUIREMENT) * (deviceCost * INSURANCEDISCOUNT);
             }
             
-
             totalInsurance += deviceCost * deviceAmount - totalDeviceCost;
 
 
