@@ -32,8 +32,6 @@ namespace DevicesApp
             while (loop == 1)
             {
                 float totalDeviceCost = 0;
-                //AddDevice(totalDeviceCost);
-                //Console.WriteLine(totalDeviceCost);
                 totalCost += AddDevice(totalDeviceCost);
 
                 Console.WriteLine("\n1   Add another device\n2   Quit and print summary");
@@ -103,15 +101,12 @@ namespace DevicesApp
 
 
             //Calculate cost
+            totalDeviceCost = deviceCost * deviceAmount;
             if (deviceAmount > DISCOUNTREQUIREMENT)
             {
-                totalDeviceCost = (deviceCost * deviceAmount) - ((deviceAmount - DISCOUNTREQUIREMENT) * (deviceCost * INSURANCEDISCOUNT));
+                totalDeviceCost -= (deviceAmount - DISCOUNTREQUIREMENT) * (deviceCost * INSURANCEDISCOUNT);
             }
-            else
-            {
-                totalDeviceCost = deviceCost * deviceAmount;
-            }
-
+            
 
             totalInsurance += deviceCost * deviceAmount - totalDeviceCost;
 
