@@ -6,21 +6,23 @@ namespace DevicesApp
     {
         //Global Variables
         static string output = "";
-
+        static decimal totalInsurance = 0;
         static int laptopCounter = 0;
         static int desktopCounter = 0;
         static int otherDeviceCounter = 0;
-
-        static decimal totalInsurance = 0;
-
+        
         static decimal mostValuableDeviceCost = 0;
         static string mostValuableDevice = "";
 
-        
+        static readonly List<string> STEPS = new List<string> { "Enter the device name", "\nEnter the device Category\n1:   Laptop\n2:   Desktop\n3:   Other", "\nEnter the cost", "Enter the amount of these devices" };
+        static readonly List<string> ERRORS = new List<string> { "Please enter four or more characters", "Please enter a value of 1, 2 or 3.", "Please enter a value between 1 and 50000", "Please enter a value between 1 and 5000" };
+
+
 
 
         static void Main(string[] args)
         {
+            //Local variables
             string loop = "";
             decimal totalCost = 0;
 
@@ -32,16 +34,21 @@ namespace DevicesApp
             Console.Clear();
 
 
+
             //Add Devices
-            while (loop == "")
+            while (loop != "q")
             {
                 decimal totalDeviceCost = 0;
                 totalCost += AddDevice(totalDeviceCost);
                 
                 Console.WriteLine("\n\nEnter    Add another device\nq        Quit and print summary");
+                Console.ForegroundColor = ConsoleColor.White;
                 loop = Console.ReadLine();
+                Console.ResetColor();
+
                 Console.Clear();
             }
+
 
 
             //Generate insurance summary
@@ -52,6 +59,10 @@ namespace DevicesApp
                 $"Most expensive device is the {mostValuableDevice} at {mostValuableDeviceCost:C}");
             Console.ReadLine();
         }
+
+
+
+
 
 
         //Add one device
@@ -67,15 +78,19 @@ namespace DevicesApp
             int deviceAmount = 0;
             string deviceCategory = "";
 
+
+
             //Add device name
             while (deviceName.Length < 4)
             {
-                Console.WriteLine("Enter the device name");
+                Console.WriteLine(STEPS[0]);
+                Console.ForegroundColor = ConsoleColor.White;
                 deviceName = Console.ReadLine();
+                Console.ResetColor();
 
                 if (deviceName.Length < 4)
                 {
-                    Console.WriteLine("Please enter four or more characters");
+                    Console.WriteLine(ERRORS[0]);
                 }
             }
             
@@ -84,12 +99,14 @@ namespace DevicesApp
             //Add the device to a category
             while (deviceCategory != "1" && deviceCategory != "2" && deviceCategory != "3")
             {
-                Console.WriteLine("\nEnter the device Category\n1:   Laptop\n2:   Desktop\n3:   Other");
+                Console.WriteLine(STEPS[1]);
+                Console.ForegroundColor = ConsoleColor.White;
                 deviceCategory = Console.ReadLine();
+                Console.ResetColor();
 
                 if (deviceCategory != "1" && deviceCategory != "2" && deviceCategory != "3")
                 {
-                    Console.WriteLine("Please enter a value of 1, 2 or 3.");
+                    Console.WriteLine(ERRORS[1]);                   
                 }
  
             }
@@ -107,17 +124,26 @@ namespace DevicesApp
                     otherDeviceCounter++;
                     deviceCategory = "Other";
                     break;
-                
             }
+
+
 
             //Add a cost to the device
             while (deviceCost < 1 || deviceCost > 50000)
             {
-                Console.WriteLine("\nEnter the cost");
-                deviceCost = decimal.Parse(Console.ReadLine());
+                Console.WriteLine(STEPS[2]);
+                try
+                {
+                    Console.ForegroundColor = ConsoleColor.White;
+                    deviceCost = decimal.Parse(Console.ReadLine());
+                    Console.ResetColor();
+                }
+                catch (Exception){}
+                
                 if (deviceCost < 1 || deviceCost > 50000)
                 {
-                    Console.WriteLine("Please enter a value between 1 and 50000");
+                    Console.ResetColor();
+                    Console.WriteLine(ERRORS[2]);
                 }
             }
             
@@ -126,12 +152,18 @@ namespace DevicesApp
             //Add the amount of devices
             while (deviceAmount < 1 || deviceAmount > 5000)
             {
-                Console.WriteLine("Enter the amount of these devices");
-                deviceAmount = int.Parse(Console.ReadLine());
-
+                Console.WriteLine(STEPS[3]);
+                try
+                {
+                    Console.ForegroundColor = ConsoleColor.White;
+                    deviceAmount = int.Parse(Console.ReadLine());
+                    Console.ResetColor();
+                }
+                catch (Exception){}
                 if (deviceAmount < 1 || deviceAmount > 5000)
                 {
-                    Console.WriteLine("Please enter a value between 1 and 5000");
+                    Console.ResetColor();
+                    Console.WriteLine(ERRORS[3]);
                 }
             }
             
@@ -153,12 +185,16 @@ namespace DevicesApp
             }
 
 
+            //Add devices insurance to the total insurance
             totalInsurance += deviceCost * deviceAmount - totalDeviceCost;
 
+
+
+            //Save results to the output
             output += $"\nTotal cost of {deviceAmount} {deviceName} devices:   {totalDeviceCost:C}\n";
 
 
-            //Print 6 month value loss
+            //Calculate 6 month value loss
             output += "Month    Value\n";
             for (int month = 1; month <= 6; month++)
             {
@@ -169,6 +205,9 @@ namespace DevicesApp
             }
 
             output += $"Device Category: {deviceCategory}\n\n";
+
+
+            //Return the total pricing of this device
             return totalDeviceCost;
         }
 
