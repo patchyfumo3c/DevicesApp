@@ -5,7 +5,7 @@ namespace DevicesApp
     internal class Program
     {
         //Global Variables
-        static string output = "",  mostValuableDevice = "";
+        static string mostValuableDevice = "";
         static decimal totalInsurance = 0, mostValuableDeviceCost = 0,  totalCost = 0;
         static int laptopCounter = 0, desktopCounter = 0, otherDeviceCounter = 0;
 
@@ -18,7 +18,7 @@ namespace DevicesApp
         static void Main(string[] args)
         {
             //Local variables
-            string loop = "";
+            string loop = "", output = "";
             decimal totalDeviceCost;
 
             //Display title page
@@ -34,9 +34,9 @@ namespace DevicesApp
             {
                 totalDeviceCost = 0;
 
-                //Add a single device to the toal cost
-                //totalCost += AddDevice(totalDeviceCost);
-                AddDevice(totalDeviceCost,totalCost);
+                //Add the output of a single device to the end output
+                output += AddDevice(totalDeviceCost);
+                
                 Console.WriteLine("\n\nEnter    Add another device\nq        Quit and print summary");
                 Console.ForegroundColor = ConsoleColor.White;
                 loop = Console.ReadLine();
@@ -62,13 +62,15 @@ namespace DevicesApp
 
 
         //Add one device
-        static string AddDevice(decimal totalDeviceCost, decimal totalCost)
+        static string AddDevice(decimal totalDeviceCost)
         {
             //Local variables
             
-            string deviceName = "", deviceCategory = "";
+            string deviceName = "", deviceCategory = "", deviceSummary = "";
             int deviceAmount = 0;
             decimal deviceCost = 0;
+            const decimal VALUELOSSRATE = 0.95m;
+
 
             //Add device name
             while (deviceName.Length < 4)
@@ -164,8 +166,29 @@ namespace DevicesApp
                 
             
             //Calculate cost
-            Calculate(totalDeviceCost, deviceCost, deviceAmount, deviceName, deviceCategory);
-            return "Device added";
+            totalDeviceCost += Calculate(totalDeviceCost, deviceCost, deviceAmount, deviceName);
+
+            //Add to total cost
+            totalCost += totalDeviceCost;
+
+            //Save results to the output
+            deviceSummary += $"\nTotal cost of {deviceAmount} {deviceName} devices:   {totalDeviceCost:C}\n";
+
+            //Calculate 6 month value loss
+            deviceSummary += "Month    Value\n";
+            for (int month = 1; month <= 6; month++)
+            {
+
+                deviceSummary += $"{month}        {deviceCost:c}\n";
+                deviceCost = deviceCost * VALUELOSSRATE;
+
+            }
+            deviceSummary += $"Device Category: {deviceCategory}\n\n";
+
+
+
+            return deviceSummary;
+
         }
 
 
@@ -173,9 +196,9 @@ namespace DevicesApp
 
 
 
-        static void Calculate(decimal totalDeviceCost, decimal deviceCost, int deviceAmount, string deviceName, string deviceCategory)
+        static decimal Calculate(decimal totalDeviceCost, decimal deviceCost, int deviceAmount, string deviceName)
         {
-            const decimal INSURANCEDISCOUNT = 0.1m, VALUELOSSRATE = 0.95m;
+            const decimal INSURANCEDISCOUNT = 0.1m;
             const int DISCOUNTREQUIREMENT = 5;
 
 
@@ -200,23 +223,8 @@ namespace DevicesApp
             //Add devices insurance to the total insurance
             totalInsurance += deviceCost * deviceAmount - totalDeviceCost;
 
-
-
-            //Save results to the output
-            output += $"\nTotal cost of {deviceAmount} {deviceName} devices:   {totalDeviceCost:C}\n";
-
-            //Calculate 6 month value loss
-            output += "Month    Value\n";
-            for (int month = 1; month <= 6; month++)
-            {
-
-                output += $"{month}        {deviceCost:c}\n";
-                deviceCost = deviceCost * VALUELOSSRATE;
-
-            }
-            output += $"Device Category: {deviceCategory}\n\n";
-
-            totalCost += totalDeviceCost;
+            
+            return totalDeviceCost;
         }
     }
 }
