@@ -43,14 +43,12 @@ namespace DevicesApp
                 Console.ForegroundColor = ConsoleColor.White;
                 loop = Console.ReadLine();
                 Console.ResetColor();
-
                 Console.Clear();
             }
 
 
 
             //Generate insurance summary
-            Console.Clear();
             Console.WriteLine(output);
             Console.WriteLine($"------------Summary------------\nAmount of Laptops:   {laptopCounter}\nAmount of Desktops:   {desktopCounter}\nAmount of other devices:   {otherDeviceCounter}\n\n" +
                 $"Total cost:   {totalCost:C}\nInsurance value:   {totalInsurance:C}\n" +
@@ -67,7 +65,6 @@ namespace DevicesApp
         static string AddDevice(decimal totalDeviceCost)
         {
             //Local variables
-            
             string deviceCategory = "", deviceSummary = "";
             int deviceAmount = 0;
           
@@ -96,39 +93,7 @@ namespace DevicesApp
 
 
 
-            //Add the device to a category
-            Console.WriteLine(STEPS[1]);
-
-            Console.ForegroundColor = ConsoleColor.White;
-            deviceCategory = Console.ReadLine();
-            Console.ResetColor();
-
-            while (deviceCategory != "1" && deviceCategory != "2" && deviceCategory != "3")
-            {
-                Console.WriteLine(ERRORS[1]);
-                Console.WriteLine(STEPS[1]);
-
-                Console.ForegroundColor = ConsoleColor.White;
-                deviceCategory = Console.ReadLine();
-                Console.ResetColor();
-                
-            }
-
-            switch (deviceCategory)
-            {
-                case "1":
-                    laptopCounter++;
-                    deviceCategory = "Laptop";
-                    break;
-                case "2":
-                    desktopCounter++;
-                    deviceCategory = "Desktop";
-                    break;
-                case "3":
-                    otherDeviceCounter++;
-                    deviceCategory = "Other";
-                    break;
-            }
+            
 
 
 
@@ -187,6 +152,40 @@ namespace DevicesApp
             }
 
 
+
+            //Add the device to a category
+            Console.WriteLine(STEPS[1]);
+
+            Console.ForegroundColor = ConsoleColor.White;
+            deviceCategory = Console.ReadLine();
+            Console.ResetColor();
+
+            while (deviceCategory != "1" && deviceCategory != "2" && deviceCategory != "3")
+            {
+                Console.WriteLine(ERRORS[1]);
+                Console.WriteLine(STEPS[1]);
+
+                Console.ForegroundColor = ConsoleColor.White;
+                deviceCategory = Console.ReadLine();
+                Console.ResetColor();
+
+            }
+
+            switch (deviceCategory)
+            {
+                case "1":
+                    laptopCounter += deviceAmount;
+                    deviceCategory = "Laptop";
+                    break;
+                case "2":
+                    desktopCounter += deviceAmount;
+                    deviceCategory = "Desktop";
+                    break;
+                case "3":
+                    otherDeviceCounter += deviceAmount;
+                    deviceCategory = "Other";
+                    break;
+            }
 
 
             //Calculate cost
